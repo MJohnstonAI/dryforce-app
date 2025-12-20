@@ -2,6 +2,8 @@
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/container-queries";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-display: var(--font-inter), sans-serif;
   --font-body: var(--font-inter), sans-serif;
@@ -21,6 +23,7 @@
 }
 
 :root {
+  color-scheme: light;
   --page-primary: 31 16 104;
   --page-primary-dark: 26 13 78;
   --page-primary-hover: 31 16 104;
