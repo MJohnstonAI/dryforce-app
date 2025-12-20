@@ -1,0 +1,112 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/container-queries";
+
+@theme {
+  --font-display: var(--font-inter), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+  --color-primary: rgb(var(--page-primary));
+  --color-primary-dark: rgb(var(--page-primary-dark));
+  --color-primary-hover: rgb(var(--page-primary-hover));
+  --color-secondary: rgb(var(--page-secondary));
+  --color-secondary-dark: rgb(var(--page-secondary-dark));
+  --color-secondary-hover: rgb(var(--page-secondary-hover));
+  --color-accent: rgb(var(--page-accent));
+  --color-background-light: rgb(var(--page-background-light));
+  --color-background-dark: rgb(var(--page-background-dark));
+  --color-text-main: rgb(var(--page-text-main));
+  --color-text-muted: rgb(var(--page-text-muted));
+  --color-surface-dark: rgb(var(--page-surface-dark));
+  --color-surface-border: rgb(var(--page-surface-border));
+}
+
+:root {
+  --page-primary: 31 16 104;
+  --page-primary-dark: 26 13 78;
+  --page-primary-hover: 31 16 104;
+  --page-secondary: 217 32 24;
+  --page-secondary-dark: 176 31 21;
+  --page-secondary-hover: 176 31 21;
+  --page-accent: 217 32 24;
+  --page-background-light: 248 249 252;
+  --page-background-dark: 16 22 34;
+  --page-text-main: 24 32 55;
+  --page-text-muted: 92 103 129;
+  --page-surface-dark: 22 30 43;
+  --page-surface-border: 226 232 240;
+}
+
+.theme-home {
+  --page-primary: 31 16 104;
+  --page-secondary: 217 32 24;
+  --page-accent: 217 32 24;
+  --page-background-light: 248 249 252;
+  --page-background-dark: 16 22 34;
+}
+
+.theme-services {
+  --page-primary: 31 16 104;
+  --page-primary-dark: 26 13 78;
+  --page-secondary: 217 32 24;
+  --page-secondary-dark: 176 31 21;
+  --page-background-light: 248 249 252;
+  --page-background-dark: 16 22 34;
+  --page-text-main: 24 32 55;
+  --page-text-muted: 92 103 129;
+}
+
+.theme-about {
+  --page-primary: 31 16 104;
+  --page-secondary: 217 32 24;
+  --page-accent: 217 32 24;
+  --page-background-light: 248 249 252;
+  --page-background-dark: 16 22 34;
+}
+
+.theme-contact {
+  --page-primary: 31 16 104;
+  --page-secondary: 217 32 24;
+  --page-accent: 217 32 24;
+  --page-background-light: 248 249 252;
+  --page-background-dark: 16 22 34;
+}
+
+.theme-emergency {
+  --page-primary: 31 16 104;
+  --page-primary-hover: 31 16 104;
+  --page-secondary: 217 32 24;
+  --page-secondary-hover: 176 31 21;
+  --page-background-light: 248 249 252;
+  --page-background-dark: 16 22 34;
+  --page-surface-dark: 22 30 43;
+  --page-surface-border: 226 232 240;
+}
+
+body {
+  font-family: var(--font-display);
+}
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.material-symbols-outlined.fill {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+@layer utilities {
+  .bg-grid-pattern {
+    background-image: radial-gradient(rgba(39, 27, 115, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
