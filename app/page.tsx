@@ -93,9 +93,12 @@ export default function HomePage() {
                   >
                     Request Emergency Service
                   </Link>
-                  <button className="flex items-center justify-center h-12 px-6 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-base font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                  <Link
+                    className="flex items-center justify-center h-12 px-6 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white text-base font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+                    href="/services"
+                  >
                     View Our Services
-                  </button>
+                  </Link>
                 </div>
                 <div className="flex items-center justify-center lg:justify-start gap-6 pt-4 text-sm text-slate-600 dark:text-slate-400 font-medium">
                   <div className="flex items-center gap-2">
@@ -187,13 +190,16 @@ export default function HomePage() {
                     Comprehensive restoration solutions tailored to the unique challenges of South
                     African properties.
                   </p>
-                  <button className="hidden md:flex items-center text-primary font-bold hover:text-blue-700 gap-1 whitespace-nowrap group text-sm">
+                  <Link
+                    className="hidden md:flex items-center text-primary font-bold hover:text-blue-700 gap-1 whitespace-nowrap group text-sm"
+                    href="/services"
+                  >
                     View all services
                     <MaterialSymbol
                       name="arrow_forward"
                       className="text-sm transition-transform group-hover:translate-x-1"
                     />
-                  </button>
+                  </Link>
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -214,12 +220,12 @@ export default function HomePage() {
                       Rapid water extraction, structural drying, and dehumidification to prevent
                       secondary damage and mould growth.
                     </p>
-                    <a
+                    <Link
                       className="mt-auto text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all"
-                      href="#"
+                      href="/services"
                     >
                       Learn more <MaterialSymbol name="arrow_forward" className="text-sm" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div className="flex flex-col rounded-xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800 group hover:shadow-lg transition-all">
@@ -239,12 +245,12 @@ export default function HomePage() {
                       Comprehensive soot removal, odor control, and structural repairs to bring your
                       property back to pre-loss condition.
                     </p>
-                    <a
+                    <Link
                       className="mt-auto text-secondary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all"
-                      href="#"
+                      href="/services"
                     >
                       Learn more <MaterialSymbol name="arrow_forward" className="text-sm" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div className="flex flex-col rounded-xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm border border-slate-100 dark:border-slate-800 group hover:shadow-lg transition-all">
@@ -264,18 +270,21 @@ export default function HomePage() {
                       Specialized deep cleaning and mold remediation services ensuring a safe and
                       healthy environment for your family.
                     </p>
-                    <a
+                    <Link
                       className="mt-auto text-green-600 text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all"
-                      href="#"
+                      href="/services"
                     >
                       Learn more <MaterialSymbol name="arrow_forward" className="text-sm" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
-              <button className="flex md:hidden mt-8 w-full justify-center items-center h-12 rounded-lg border border-primary text-primary font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+              <Link
+                className="flex md:hidden mt-8 w-full justify-center items-center h-12 rounded-lg border border-primary text-primary font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                href="/services"
+              >
                 View all services
-              </button>
+              </Link>
             </div>
           </div>
         </section>
@@ -427,24 +436,24 @@ export default function HomePage() {
                 <h4 className="font-bold text-white mb-4">Services</h4>
                 <ul className="space-y-3 text-sm text-blue-100">
                   <li>
-                    <a className="hover:text-accent transition-colors" href="#">
+                    <Link className="hover:text-accent transition-colors" href="/services">
                       Water Damage
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a className="hover:text-accent transition-colors" href="#">
+                    <Link className="hover:text-accent transition-colors" href="/services">
                       Fire &amp; Smoke
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a className="hover:text-accent transition-colors" href="#">
+                    <Link className="hover:text-accent transition-colors" href="/services">
                       Mould Remediation
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a className="hover:text-accent transition-colors" href="#">
+                    <Link className="hover:text-accent transition-colors" href="/services">
                       Storm Damage
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
