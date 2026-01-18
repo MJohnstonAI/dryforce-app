@@ -8,7 +8,12 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "Dry Force",
     template: "%s",
@@ -20,6 +25,20 @@ export const metadata: Metadata = {
     description:
       "South Africa's trusted partner for fire and flood restoration services.",
     type: "website",
+    url: "/",
+    images: ["/images/home-hero.png"],
+    locale: "en_ZA",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dry Force",
+    description:
+      "Dry Force provides 24/7 fire and flood restoration services across South Africa's major metros.",
+    images: ["/images/home-hero.png"],
+  },
+  other: {
+    "geo.region": "ZA",
+    "geo.placename": "South Africa",
   },
 };
 
@@ -29,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`light scroll-smooth ${inter.variable}`}>
+    <html lang="en-ZA" className={`light scroll-smooth ${inter.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

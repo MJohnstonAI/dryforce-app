@@ -7,6 +7,25 @@ import CopyEmail from "@/components/CopyEmail";
 
 export const metadata: Metadata = {
   title: "About Us - Dry Force",
+  description:
+    "Meet Dry Force, South Africa's trusted fire and flood restoration experts.",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "About Us - Dry Force",
+    description:
+      "Meet Dry Force, South Africa's trusted fire and flood restoration experts.",
+    url: "/about",
+    images: ["/images/about-hero.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About Us - Dry Force",
+    description:
+      "Meet Dry Force, South Africa's trusted fire and flood restoration experts.",
+    images: ["/images/about-hero.png"],
+  },
 };
 
 export default function AboutPage() {

@@ -5,6 +5,25 @@ import CopyEmail from "@/components/CopyEmail";
 
 export const metadata: Metadata = {
   title: "Dry Force - Emergency & Booking",
+  description:
+    "Schedule an assessment or request immediate flood and fire recovery support in South Africa.",
+  alternates: {
+    canonical: "/emergency",
+  },
+  openGraph: {
+    title: "Dry Force - Emergency & Booking",
+    description:
+      "Schedule an assessment or request immediate flood and fire recovery support in South Africa.",
+    url: "/emergency",
+    images: ["/images/emergency-texture.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dry Force - Emergency & Booking",
+    description:
+      "Schedule an assessment or request immediate flood and fire recovery support.",
+    images: ["/images/emergency-texture.png"],
+  },
 };
 
 export default function EmergencyBookingPage() {

@@ -1,14 +1,199 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import LogoImage from "@/components/LogoImage";
 import MaterialSymbol from "@/components/MaterialSymbol";
 import CopyEmail from "@/components/CopyEmail";
+import { rateLimit } from "@/lib/rate-limit";
 
 export const metadata: Metadata = {
   title: "Services - Dry Force",
+  description:
+    "Flood recovery, fire restoration, and specialty cleaning services across South Africa.",
+  alternates: {
+    canonical: "/services",
+  },
+  openGraph: {
+    title: "Services - Dry Force",
+    description:
+      "Flood recovery, fire restoration, and specialty cleaning services across South Africa.",
+    url: "/services",
+    images: ["/images/services-hero.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Services - Dry Force",
+    description:
+      "Flood recovery, fire restoration, and specialty cleaning services across South Africa.",
+    images: ["/images/services-hero.png"],
+  },
 };
 
-export default function ServicesPage() {
+const RESEND_ENDPOINT = "https://api.resend.com/emails";
+// const OPERATIONS_EMAIL = "operations@dryforce.co.za";
+const OPERATIONS_EMAIL = "syncteamai@gmail.com";
+const RESEND_FROM_EMAIL =
+  process.env.RESEND_FROM_EMAIL ?? "Dry Force <onboarding@resend.dev>";
+const RESEND_TO_EMAIL = process.env.RESEND_TO_EMAIL ?? OPERATIONS_EMAIL;
+const CALLBACK_RATE_LIMIT_WINDOW_MS = 60_000;
+const CALLBACK_RATE_LIMIT_MAX = 3;
+const CALLBACK_TIMEOUT_MS = 4000;
+const CALLBACK_RETRY_DELAY_MS = 250;
+const CALLBACK_MAX_RETRIES = 1;
+const CALLBACK_MAX_INFLIGHT = 10;
+
+let callbackInflight = 0;
+
+function getFormValue(formData: FormData, key: string) {
+  const value = formData.get(key);
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function isValidEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit,
+  timeoutMs: number,
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+async function fetchWithRetry(url: string, options: RequestInit): Promise<Response> {
+  let attempt = 0;
+  let lastError: unknown;
+
+  while (attempt <= CALLBACK_MAX_RETRIES) {
+    try {
+      return await fetchWithTimeout(url, options, CALLBACK_TIMEOUT_MS);
+    } catch (error) {
+      lastError = error;
+      if (attempt === CALLBACK_MAX_RETRIES) break;
+      await new Promise((resolve) => setTimeout(resolve, CALLBACK_RETRY_DELAY_MS * (attempt + 1)));
+      attempt += 1;
+    }
+  }
+
+  throw lastError;
+}
+
+async function requestCallback(formData: FormData) {
+  "use server";
+
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.error("Missing RESEND_API_KEY.");
+    return redirect("/services?status=error&reason=config#callback");
+  }
+
+  const email = getFormValue(formData, "callbackEmail");
+  if (!email || !isValidEmail(email)) {
+    return redirect("/services?status=error&reason=validation#callback");
+  }
+
+  const headerStore = await headers();
+  const forwardedFor = headerStore.get("x-forwarded-for");
+  const clientIp =
+    forwardedFor?.split(",")[0]?.trim() || headerStore.get("x-real-ip") || "unknown";
+
+  const rate = rateLimit({
+    key: `${clientIp}|${email}`,
+    limit: CALLBACK_RATE_LIMIT_MAX,
+    windowMs: CALLBACK_RATE_LIMIT_WINDOW_MS,
+  });
+
+  if (!rate.ok) {
+    return redirect("/services?status=error&reason=rate#callback");
+  }
+
+  if (callbackInflight >= CALLBACK_MAX_INFLIGHT) {
+    return redirect("/services?status=error&reason=busy#callback");
+  }
+
+  callbackInflight += 1;
+  try {
+    const payload = {
+      from: RESEND_FROM_EMAIL,
+      to: [RESEND_TO_EMAIL],
+      reply_to: email,
+      subject: "Callback request - Services page",
+      html: `<p>Callback request from services page.</p><p><strong>Email:</strong> ${email}</p>`,
+      text: `Callback request from services page.\nEmail: ${email}`,
+    };
+
+    const response = await fetchWithRetry(RESEND_ENDPOINT, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Resend error:", errorText);
+      return redirect("/services?status=error&reason=send#callback");
+    }
+  } catch (error) {
+    console.error("Resend error:", error);
+    return redirect("/services?status=error&reason=send#callback");
+  } finally {
+    callbackInflight -= 1;
+  }
+
+  return redirect("/services?status=success#callback");
+}
+
+type ServicesPageProps = {
+  searchParams?:
+    | {
+        status?: string;
+        reason?: string;
+      }
+    | Promise<{
+        status?: string;
+        reason?: string;
+      }>;
+};
+
+export default async function ServicesPage({ searchParams }: ServicesPageProps) {
+  const resolvedSearchParams = await Promise.resolve(searchParams);
+  const status = resolvedSearchParams?.status;
+  const reason = resolvedSearchParams?.reason;
+
+  const statusMessage = (() => {
+    if (status === "success") {
+      return { tone: "success", text: "Thanks, we will call you back soon." };
+    }
+
+    if (status === "error") {
+      switch (reason) {
+        case "validation":
+          return { tone: "error", text: "Enter a valid email address." };
+        case "rate":
+          return { tone: "error", text: "Too many requests. Try again shortly." };
+        case "busy":
+          return { tone: "error", text: "We are busy right now. Please retry." };
+        case "config":
+          return { tone: "error", text: "Form is unavailable. Please call 0860 800 800." };
+        default:
+          return { tone: "error", text: "We could not send your request." };
+      }
+    }
+
+    return null;
+  })();
+
   return (
     <div className="theme-services bg-background-light dark:bg-background-dark text-text-main dark:text-white">
       <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur dark:bg-background-dark/95 dark:border-gray-800">
@@ -488,7 +673,7 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        <section className="w-full max-w-[720px] px-4 mx-auto text-center py-10 pb-20">
+        <section className="w-full max-w-[720px] px-4 mx-auto text-center py-10 pb-20" id="callback">
           <h2 className="text-3xl font-bold text-text-main dark:text-white mb-4">
             Not an emergency? Get a Quote
           </h2>
@@ -496,19 +681,34 @@ export default function ServicesPage() {
             Fill out our online form for non-urgent restoration inquiries and we will get back to you
             within 24 hours.
           </p>
-          <form className="flex flex-col sm:flex-row gap-4">
+          {statusMessage ? (
+            <div
+              className={`mb-4 rounded-lg border px-4 py-3 text-sm ${
+                statusMessage.tone === "success"
+                  ? "border-green-200 bg-green-50 text-green-700 dark:border-green-900/40 dark:bg-green-900/20 dark:text-green-200"
+                  : "border-red-200 bg-red-50 text-red-700 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-200"
+              }`}
+              role="status"
+              aria-live="polite"
+            >
+              {statusMessage.text}
+            </div>
+          ) : null}
+          <form className="flex flex-col sm:flex-row gap-4" action={requestCallback}>
             <label className="sr-only" htmlFor="services-email">
               Email address
             </label>
             <input
               className="flex-1 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-[#101622] px-5 py-4 text-base outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-text-main dark:text-white shadow-sm"
               id="services-email"
+              name="callbackEmail"
               placeholder="Enter your email address"
               type="email"
+              required
             />
             <button
               className="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-lg font-bold text-base whitespace-nowrap transition-colors shadow-md"
-              type="button"
+              type="submit"
             >
               Request Call Back
             </button>

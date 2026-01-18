@@ -6,6 +6,51 @@ import CopyEmail from "@/components/CopyEmail";
 
 export const metadata: Metadata = {
   title: "Dry Force - Fire & Flood Restoration Experts",
+  description:
+    "24/7 fire and flood restoration experts serving Johannesburg, Cape Town, and Durban in South Africa.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Dry Force - Fire & Flood Restoration Experts",
+    description:
+      "24/7 fire and flood restoration experts serving Johannesburg, Cape Town, and Durban in South Africa.",
+    url: "/",
+    images: ["/images/home-hero.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dry Force - Fire & Flood Restoration Experts",
+    description:
+      "24/7 fire and flood restoration experts serving Johannesburg, Cape Town, and Durban.",
+    images: ["/images/home-hero.png"],
+  },
+};
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.dryforce.co.za";
+const LOCAL_BUSINESS_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": `${SITE_URL}/#localbusiness`,
+  name: "Dry Force",
+  url: SITE_URL,
+  logo: `${SITE_URL}/stitch/dry_force_logo.png`,
+  image: `${SITE_URL}/images/home-hero.png`,
+  telephone: "0860 800 800",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "12 Business Park Road",
+    addressLocality: "Midrand",
+    addressRegion: "Gauteng",
+    postalCode: "1685",
+    addressCountry: "ZA",
+  },
+  areaServed: [
+    {
+      "@type": "Country",
+      name: "South Africa",
+    },
+  ],
 };
 
 export default function HomePage() {
@@ -67,6 +112,11 @@ export default function HomePage() {
       </div>
 
       <main>
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(LOCAL_BUSINESS_JSON_LD) }}
+        />
         <section className="relative w-full flex justify-center py-12 md:py-20 lg:py-24 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-slate-900 dark:to-background-dark">
           <div className="layout-content-container flex flex-col max-w-[1280px] w-full px-4 md:px-10">
             <div className="flex flex-col lg:flex-row gap-10 lg:gap-20 items-center">
