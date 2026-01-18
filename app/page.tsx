@@ -3,6 +3,7 @@ import Link from "next/link";
 import LogoImage from "@/components/LogoImage";
 import MaterialSymbol from "@/components/MaterialSymbol";
 import CopyEmail from "@/components/CopyEmail";
+import MobileMenu from "@/components/MobileMenu";
 
 export const metadata: Metadata = {
   title: "Dry Force - Fire & Flood Restoration Experts",
@@ -53,6 +54,12 @@ const LOCAL_BUSINESS_JSON_LD = {
   ],
 };
 
+const MOBILE_LINKS = [
+  { label: "Services", href: "/services" },
+  { label: "About Us", href: "/about" },
+  { label: "Service Areas", href: "#" },
+];
+
 export default function HomePage() {
   return (
     <div className="theme-home bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white antialiased overflow-x-hidden">
@@ -94,18 +101,21 @@ export default function HomePage() {
                   <button className="hidden lg:flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-white dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors text-sm font-bold border border-slate-200 dark:border-slate-700">
                     <span>Client Portal</span>
                   </button>
-                  <button className="flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-secondary text-white hover:bg-red-700 transition-colors text-sm font-bold gap-2">
+                  <a
+                    className="flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-secondary text-white hover:bg-red-700 transition-colors text-sm font-bold gap-2"
+                    href="tel:0860800800"
+                  >
                     <MaterialSymbol name="call" className="text-[20px]" />
                     <span>0860 800 800</span>
-                  </button>
+                  </a>
                 </div>
               </div>
-              <button
-                className="md:hidden p-2 text-slate-900 dark:text-white"
-                aria-label="Open menu"
-              >
-                <MaterialSymbol name="menu" />
-              </button>
+              <MobileMenu
+                buttonClassName="p-2 text-slate-900 dark:text-white"
+                emergencyHref="tel:0860800800"
+                emergencyLabel="Call 0860 800 800"
+                links={MOBILE_LINKS}
+              />
             </header>
           </div>
         </div>
@@ -114,7 +124,6 @@ export default function HomePage() {
       <main>
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(LOCAL_BUSINESS_JSON_LD) }}
         />
         <section className="relative w-full flex justify-center py-12 md:py-20 lg:py-24 bg-gradient-to-b from-blue-50/50 to-transparent dark:from-slate-900 dark:to-background-dark">
@@ -555,7 +564,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-blue-200 text-xs">Ac 2025 Dry Force SA. All rights reserved.</p>
+              <p className="text-blue-200 text-xs">© 2025 Dry Force. All rights reserved.</p>
               <div className="flex gap-6 text-blue-200 text-xs">
                 <a className="hover:text-white transition-colors" href="#">
                   Privacy Policy

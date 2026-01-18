@@ -4,6 +4,7 @@ import Link from "next/link";
 import LogoImage from "@/components/LogoImage";
 import MaterialSymbol from "@/components/MaterialSymbol";
 import CopyEmail from "@/components/CopyEmail";
+import MobileMenu from "@/components/MobileMenu";
 
 export const metadata: Metadata = {
   title: "About Us - Dry Force",
@@ -27,6 +28,13 @@ export const metadata: Metadata = {
     images: ["/images/about-hero.png"],
   },
 };
+
+const MOBILE_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "About Us", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
 
 export default function AboutPage() {
   return (
@@ -67,13 +75,20 @@ export default function AboutPage() {
                 Contact
               </Link>
             </div>
-            <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-accent text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-red-700 transition-colors shadow-sm">
+            <a
+              className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-accent text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-red-700 transition-colors shadow-sm"
+              href="tel:0860800800"
+            >
               <span className="truncate">0860 800 800</span>
-            </button>
+            </a>
           </div>
-          <button className="lg:hidden" aria-label="Open menu">
-            <MaterialSymbol name="menu" className="cursor-pointer" />
-          </button>
+          <MobileMenu
+            wrapperClassName="lg:hidden"
+            buttonClassName="text-[#0d121b] dark:text-white"
+            emergencyHref="tel:0860800800"
+            emergencyLabel="Call 0860 800 800"
+            links={MOBILE_LINKS}
+          />
         </header>
 
         <div className="w-full">
@@ -431,7 +446,7 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="max-w-[1200px] mx-auto mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-blue-200">
-            <p>Ac 2025 Dry Force. All rights reserved.</p>
+            <p>© 2025 Dry Force. All rights reserved.</p>
             <div className="flex gap-6">
               <a className="hover:text-white transition-colors" href="#">
                 Privacy Policy

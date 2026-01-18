@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import LogoImage from "@/components/LogoImage";
 import MaterialSymbol from "@/components/MaterialSymbol";
 import CopyEmail from "@/components/CopyEmail";
+import MobileMenu from "@/components/MobileMenu";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const metadata: Metadata = {
@@ -29,6 +30,13 @@ export const metadata: Metadata = {
     images: ["/images/services-hero.png"],
   },
 };
+
+const MOBILE_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "About Us", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
 
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
 // const OPERATIONS_EMAIL = "operations@dryforce.co.za";
@@ -226,20 +234,23 @@ export default async function ServicesPage({ searchParams }: ServicesPageProps) 
               </Link>
             </nav>
             <div className="flex flex-col items-end">
-              <button className="flex items-center justify-center rounded-lg h-10 px-4 bg-secondary text-white text-sm font-bold hover:bg-secondary-dark transition-colors shadow-sm shadow-red-200 dark:shadow-none mb-1">
+              <a
+                className="flex items-center justify-center rounded-lg h-10 px-4 bg-secondary text-white text-sm font-bold hover:bg-secondary-dark transition-colors shadow-sm shadow-red-200 dark:shadow-none mb-1"
+                href="tel:0860800800"
+              >
                 <span className="truncate">Emergency: 0860 800 800</span>
-              </button>
+              </a>
               <span className="text-[10px] font-bold text-primary uppercase tracking-wide">
                 Open 24 Hours
               </span>
             </div>
           </div>
-          <button
-            className="md:hidden text-text-main dark:text-white"
-            aria-label="Open menu"
-          >
-            <MaterialSymbol name="menu" />
-          </button>
+          <MobileMenu
+            buttonClassName="text-text-main dark:text-white"
+            emergencyHref="tel:0860800800"
+            emergencyLabel="Call 0860 800 800"
+            links={MOBILE_LINKS}
+          />
         </div>
       </header>
 
@@ -726,7 +737,7 @@ export default async function ServicesPage({ searchParams }: ServicesPageProps) 
             />
           </div>
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-6 text-sm text-text-muted dark:text-gray-400">
-            <span>Ac 2023 Dry Force. Serving JHB, CPT, DBN &amp; PE.</span>
+            <span>© 2025 Dry Force. All rights reserved.</span>
             <span className="hidden md:inline">|</span>
             <span className="font-bold text-secondary">0860 800 800</span>
             <span className="hidden md:inline">|</span>

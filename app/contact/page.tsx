@@ -7,6 +7,7 @@ import LogoImage from "@/components/LogoImage";
 import MaterialSymbol from "@/components/MaterialSymbol";
 import CopyEmail from "@/components/CopyEmail";
 import SubmitButton from "@/components/SubmitButton";
+import MobileMenu from "@/components/MobileMenu";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const metadata: Metadata = {
@@ -31,6 +32,13 @@ export const metadata: Metadata = {
     images: ["/images/contact-map.png"],
   },
 };
+
+const MOBILE_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: "About Us", href: "/about" },
+  { label: "Contact Us", href: "/contact" },
+];
 
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
 // const OPERATIONS_EMAIL = "operations@dryforce.co.za";
@@ -528,22 +536,28 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
               Contact Us
             </span>
           </div>
-          <button className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-accent hover:bg-red-700 transition-colors text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-lg shadow-red-500/20">
+          <a
+            className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-accent hover:bg-red-700 transition-colors text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-lg shadow-red-500/20"
+            href="tel:0860800800"
+          >
             <span className="truncate flex items-center gap-2">
               <MaterialSymbol name="emergency_home" className="text-[20px]" />
               Emergency: 0860 800 800
             </span>
-          </button>
+          </a>
         </div>
-        <button className="lg:hidden text-primary dark:text-white" aria-label="Open menu">
-          <MaterialSymbol name="menu" />
-        </button>
+        <MobileMenu
+          wrapperClassName="lg:hidden"
+          buttonClassName="text-primary dark:text-white"
+          emergencyHref="tel:0860800800"
+          emergencyLabel="Call 0860 800 800"
+          links={MOBILE_LINKS}
+        />
       </header>
 
       <main className="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(LOCAL_BUSINESS_JSON_LD) }}
         />
         <div className="mb-10 text-center lg:text-left">
@@ -855,7 +869,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
 
       <footer className="bg-primary text-white border-t border-blue-900 mt-auto py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-blue-100/70">
-          <p>Ac 2025 Dry Force. All rights reserved.</p>
+          <p>© 2025 Dry Force. All rights reserved.</p>
         </div>
       </footer>
     </div>
